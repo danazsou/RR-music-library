@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 function ArtistView() {
     const { id } = useParams()
@@ -10,10 +10,30 @@ function ArtistView() {
         const fetchData = async () => {
             const response = await fetch(API_URL)
             const resData = await response.json()
-            console.log(resData)
+            setArtistData(resData.results)
         }
-        fetchData(id)
+        fetchData()
+    }, [id])
+
+    const justAlbums = artistData.filter(entry => entry.collectionType === 'Album')
+
+    const renderAlbums = justAlbums.map((album, i) => {
+        return (
+            <div key={id}>
+                <Link to={`/album/${album.collectionId}`}>
+                    <p>{album.collectionName}</p>
+                </Link>
+            </div>
+        )
     })
+
+    return (
+        <div>
+            <h2>The id passed was: {id}</h2>
+            <p>Artist Data Goes Here!</p>
+            {renderAlbums}
+        </div>
+    )
 }
 
 
